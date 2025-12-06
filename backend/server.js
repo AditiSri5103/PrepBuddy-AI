@@ -14,11 +14,18 @@ app.use(cors(
     }
 ));
 
-connectDB()
+connectDB();
 
-app.use(express.json())
+app.use(express.json());
 
-const PORT=process.env.PORT || 5000 
+//routes
+app.use("/api/auth", authRoutes);
+// app.use("/api/sessions", sessionRoutes);
+// app.use("/api/quesions", quesRoutes);
+// app.use("/api/ai/generate-questions", protect, generateInterviewQuestions);
+// app.use("/api/ai/generate-explanation", protect, generateConceptExplanation);
+
+const PORT=process.env.PORT || 5000 ;
 
 
-app.listen(PORT,()=>console.log(`server running on port ${PORT}`))
+app.listen(PORT,()=>console.log(`server running on port ${PORT}`));
