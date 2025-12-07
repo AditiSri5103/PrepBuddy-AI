@@ -1,0 +1,21 @@
+const jwt=require("jsonwebtoken");
+const User=require("../models/User");
+
+const protect = async (req, res, next) => {
+    try{
+        let token = req.headers.authorization;
+        if(token){
+            token = token.split(" ")[1];
+            const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+            req.user = await User.findById(userId).select("-password");
+            next(); 
+        }
+        else{
+            res.status(401).json({message : "Not Authorised"});            
+        }
+    }
+    catch(error){
+        res.status(401).json({message : "Token Failure", error : error.message});
+    }
+}
+module.exports = {protect};
