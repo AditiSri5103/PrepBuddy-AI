@@ -7,6 +7,7 @@ const generateToken = (userId) => {
     });
 };
 
+// -api/auth/register
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -37,6 +38,7 @@ const registerUser = async (req, res) => {
     }
 };
 
+// -api/auth/login
 const loginUser = async (req, res) => {
     try {
         const {name, email, password}=req.body;
@@ -61,6 +63,7 @@ const loginUser = async (req, res) => {
     }
 };
 
+// -api/auth/profile
 const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
