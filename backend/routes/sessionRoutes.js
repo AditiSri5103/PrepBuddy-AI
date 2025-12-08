@@ -6,5 +6,5 @@ const {protect}=require("../middlewares/authMiddleware");
 
 router.get("/my-sessions", protect, getMySessions);
 router.post("/create", protect, createSession);
-router.post("/:id", protect, getSessionById);
-router.post("/:id", protect, deleteSession);
+router.get("/:id", protect, getSessionById);
+router.delete("/:id", protect, deleteSession);
