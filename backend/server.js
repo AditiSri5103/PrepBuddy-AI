@@ -21,7 +21,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/sessions", sessionRoutes);
+app.use("/api/sessions", sessionRoutes);
 // app.use("/api/quesions", quesRoutes);
 // app.use("/api/ai/generate-questions", protect, generateInterviewQuestions);
 // app.use("/api/ai/generate-explanation", protect, generateConceptExplanation);
