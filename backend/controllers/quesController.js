@@ -1,0 +1,44 @@
+const Question = require("../models/Question");
+const Quesion = require("../models/Question");
+const Session = require("../models/Session");
+
+// @route   api/questions/add
+exports.addQuestionToSession = async (req, res) => {
+    try {
+        const { sessionId, questions } = req.body;
+        const session = await Session.findById(sessionId);
+        if (!session) {
+            return res.status(404).json({ success: false, message: "Session not found." })
+        }
+        const createdQuestions = await Question.insertMany(questions.map(q => ({
+        session: sessionId,
+        question: q.question,
+        answer: q.answer
+      })));
+        const questionIds = createdQuestions.map(q => q._id);
+        session.questions.push(...questionIds);
+        await session.save();
+        res.status(201).json({ success: true, createdQuestions });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// @route   api/questions/:id/pin
+exports.togglePinQuestion = async (req, res) => {
+    try {
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// @route   api/questions/:id/note
+exports.updateQuestionNote = async (req, res) => {
+    try {
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
