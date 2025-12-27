@@ -73,7 +73,22 @@ const getMySessions = async (req, res) => {
 
 // @desc - delete a session with its questions
 const deleteSession = async (req, res) => {
+    
     try {
+        const sessionId=req.params.id;
+        const session=await Session.findById(sessionId);
+        if(!session){
+            return res.status(404).json({success:false, message:"Session not found."})
+        }
+        //checking if logged-in user owns the session
+        if(req.user.id != session.user.toString()){
+            return res.status(403).json({success:false, message: "Not authorized to delete this session."})
+        }
+        //firstly deleting all questions of a session and then the session
+        await Question.deleteMany({session : session._id});
+        await session.deleteOne();
+        res.status(200).json({success: true, message: "Session deleted successfully."});
+
     } catch (error) {
         return res.status(500).json({ success: false, message: "Server Error" });
     }
