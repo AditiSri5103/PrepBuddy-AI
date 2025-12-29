@@ -31,7 +31,14 @@ exports.addQuestionToSession = async (req, res) => {
 // @route   api/questions/:id/pin
 exports.togglePinQuestion = async (req, res) => {
     try {
-        
+        const questionId=req.params.id;
+        const question=await Question.findById(questionId);
+        if(!question){
+            return res.status(404).json({success:false, message:"Question not found."});
+        }
+        question.isPinned=!question.isPinned;
+        await question.save();
+        res.status(200).json({success:true, question});
     }
     catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -41,6 +48,7 @@ exports.togglePinQuestion = async (req, res) => {
 // @route   api/questions/:id/note
 exports.updateQuestionNote = async (req, res) => {
     try {
+        
     }
     catch (error) {
         res.status(500).json({ success: false, message: error.message });
