@@ -6,6 +6,9 @@ const Session = require("../models/Session");
 exports.addQuestionToSession = async (req, res) => {
     try {
         const { sessionId, questions } = req.body;
+        if(!sessionId || !questions || !Array.isArray(question)){
+            return res.status(400).json({success:false, message:"Invalid input data."});
+        }
         const session = await Session.findById(sessionId);
         if (!session) {
             return res.status(404).json({ success: false, message: "Session not found." })
@@ -28,6 +31,7 @@ exports.addQuestionToSession = async (req, res) => {
 // @route   api/questions/:id/pin
 exports.togglePinQuestion = async (req, res) => {
     try {
+        
     }
     catch (error) {
         res.status(500).json({ success: false, message: error.message });
