@@ -2,6 +2,8 @@ import { React, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Input from '../../components/Inputs/input'
 import { validateEmail } from '../../utils/helper'
+import instance from '../../utils/axiosInstance'
+import { API_PATHS } from '../../utils/apiPaths'
 
 const Login = ({ setCurrentPage }) => {
     const [email, setEmail] = useState("");
@@ -9,7 +11,7 @@ const Login = ({ setCurrentPage }) => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         if (!validateEmail(email)) {
@@ -24,7 +26,16 @@ const Login = ({ setCurrentPage }) => {
 
         setError(null);
         // Proceed with login (API call, etc.)
-        try { }
+        try { 
+            const response=await instance.post(API_PATHS.AUTH.LOGIN,{
+                email, password
+            });
+            const {token}=response.data;
+            if(token){
+                localStorage.setItem("token", token);
+                navigate("/dashboard");
+            }
+        }
         catch (error) {
             if (error.response && error.response.data.message) {
                 setError(error.response.data.message);
