@@ -2,16 +2,28 @@
 import React from 'react';
 // have to import landing page image later
 import { APP_FEATURES } from '../utils/data'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { LuSparkles } from 'react-icons/lu';
 import Modal from '../components/Modal';
 import Login from './Auth/Login';
 import Signup from './Auth/SignUp';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/userContext'; 
+import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
 
 const LandingPage = () => {
-    const [openAuthModal, setOpenAuthModel] = useState(false);
+    const {user}=useContext(UserContext);
+    const navigate = useNavigate();
+    const [openAuthModal, setOpenAuthModal] = useState(false);
     const [currentPage, setCurrentPage] = useState("login");
-    const handleCTA = () => { };
+    const handleCTA = () => { 
+        if(!user){
+            setOpenAuthModal(true);
+        }
+        else{
+            navigate('/dashboard')
+        }
+    };
     return (
         <>
             <div className="w-full min-h-screen bg-[white]">
@@ -19,9 +31,10 @@ const LandingPage = () => {
                 <div className="container mx-auto  px-4 pt-6 z-10 pb-[200px] relative">
                     <header className='flex justify-between items-center mb-12'>
                         <div className='text-xl font-bold'>PrepBuddy AI </div>
-                        <button
+                        {user? (<ProfileInfoCard/>):
+                        (<button
                             className="bg-linear-to-r from-[#FF9324] to-[#e99a4b] font-semibold text-white px-7 py-2.5 rounded-full hover:bg-black hover:text-white border border-white transition-colors cursor-pointer"
-                            onClick={() => { setOpenAuthModel(true) }}>Login / SignUp</button>
+                            onClick={() => { setOpenAuthModal(true) }}>Login / SignUp</button>)}
                     </header>
                     <div className="flex flex-col  items-center md:flex-row md:gap-20">
                         <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
@@ -72,7 +85,7 @@ const LandingPage = () => {
             <Modal
                 isOpen={openAuthModal}
                 onClose={() => {
-                    setOpenAuthModel(false);
+                    setOpenAuthModal(false);
                     setCurrentPage("login");
                 }}
                 hideHeader
