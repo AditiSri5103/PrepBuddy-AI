@@ -12,7 +12,7 @@ const ProfileInfoCard = () => {
     navigate("/");
   };
 
-  return (
+  return user && (
     <div className="flex flex-col items-start space-y-3 px-4 py-3">
       
       <div className="text-gray-700 text-base">
