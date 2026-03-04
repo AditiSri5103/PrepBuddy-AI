@@ -1,7 +1,10 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
 import Input from '../../components/Inputs/input'
 import { validateEmail } from '../../utils/helper';
+import instance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
 
 const SignUp = ({setCurrentPage}) => {
   // const [profilePic, setProfilePic] = useState(null);
@@ -9,10 +12,10 @@ const SignUp = ({setCurrentPage}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
+  const {updateUser}=useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     
     if(!name){
@@ -30,7 +33,17 @@ const SignUp = ({setCurrentPage}) => {
     setError(null);
 
     try { 
-      
+      console.log(name);
+      const response= await instance.post(API_PATHS.AUTH.REGISTER, {
+        name, email, password
+      });
+      const {token}=response.data;
+      if(token){
+        localStorage.setItem("token", token);
+        updateUser(response.data);
+        navigate("/dashboard");
+
+      }
     }
         catch (error) {
             if (error.response && error.response.data.message) {
